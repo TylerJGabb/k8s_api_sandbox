@@ -5,7 +5,7 @@ metadata:
   name: svc-reader-role-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: service-reader
 subjects:
   - kind: ServiceAccount
