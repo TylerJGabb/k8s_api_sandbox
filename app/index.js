@@ -12,8 +12,10 @@ k8sApi
     const { response, body } = res;
 
     //log a message with the status code
-    console.log(`Status code: ${response.statusCode}`);
-    console.log(`Found ${body.items.length} services.`);
+    console.log(
+      `status=${response.statusCode}, response=${JSON.stringify(response)}`
+    );
+    console.log(`Found ${body.items.length} services`);
     body.items.forEach((item) => {
       console.log(item.metadata.name);
     });
