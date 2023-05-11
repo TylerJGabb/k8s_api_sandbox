@@ -1,5 +1,11 @@
 # Readme
 
+## Terraform
+
+I'm currently in the process of trying to manage this infrastructure in terraform so that it can be easily ported for hackday.
+
+Might want to try this https://cloud.google.com/docs/terraform/resource-management/managing-infrastructure-as-codefs
+
 There are two services in this repo. One is a service account lister and the other is a token generator. Both are written in node and are intended to be run as a docker container in GKE.
 
 I've included a script in each director [svc-lister/build_and_push.sh](./svc-lister/build_and_push.sh) and [token_generator/build_and_push.sh](./token_generator/build_and_push.sh) that will build the docker image and push it to GAR.
@@ -7,7 +13,6 @@ I've included a script in each director [svc-lister/build_and_push.sh](./svc-lis
 ## Listing items in GAR
 
 ```
-us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
 gcloud artifacts files list --repository=docker-repo
 ```
 
