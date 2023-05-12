@@ -21,7 +21,7 @@ spec:
         - image: us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/token-generator
           name: token-generator
           resources: {}
-      serviceAccountName: k8s-sa
+      serviceAccountName: {{ .Values.k8s_pod_agent_service_account_name }}
       nodeSelector:
         iam.gke.io/gke-metadata-server-enabled: "true"
 status: {}

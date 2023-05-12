@@ -50,5 +50,5 @@ resource "kubernetes_cluster_role_binding" "pod_agent_service_lister" {
 }
 
 output "k8s_pod_agent_service_account_name" {
-    value = kubernetes_service_account.pod_agent.metadata[0].name
+  value = kubernetes_service_account.pod_agent.metadata[0].name
 }

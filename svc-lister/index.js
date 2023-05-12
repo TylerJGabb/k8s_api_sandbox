@@ -7,7 +7,7 @@ kc.loadFromCluster();
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 k8sApi
-  .listNamespacedService("default")
+  .listNamespacedService("terraform-managed-namespace")
   .then((res) => {
     const { response, body } = res;
 

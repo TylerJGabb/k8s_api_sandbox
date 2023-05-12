@@ -1,0 +1,2 @@
+k8s_pod_agent_service_account_name: pod-agent
+pod_agent_sa_email: gke-pod-agent@a-proj-to-be-deleted.iam.gserviceaccount.com

@@ -21,5 +21,5 @@ spec:
         - image: us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
           name: sa-lister
           resources: {}
-      serviceAccountName: k8s-sa
+      serviceAccountName: {{ .Values.k8s_pod_agent_service_account_name }}
 status: {}
