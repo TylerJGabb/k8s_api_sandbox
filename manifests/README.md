@@ -1,7 +1,6 @@
 # Manifests
 
-This is a poor mans k8s manifest collection. I'm not using helm
+## How to generate values files
 
-This diagram is the best depiction of the architecture
-
-![image.png](./image.png)
+1. run the shell script `generate_values.sh` from the root of the repo
+2. this will run terraform apply to produce outputs, and use said outputs to generate a values file

@@ -1,10 +1,22 @@
 # Readme
 
+## Config Connector
+
+I am following this tutorial to install this on my cluster: https://cloud.google.com/config-connector/docs/how-to/advanced-install#manual
+
+I'm trying to do as much as I can in terraform.
+
+I was able to get the config connector installed and working with terraform. I'm now following https://cloud.google.com/config-connector/docs/how-to/getting-started
+
 ## Terraform
 
 I'm currently in the process of trying to manage this infrastructure in terraform so that it can be easily ported for hackday.
 
-Might want to try this https://cloud.google.com/docs/terraform/resource-management/managing-infrastructure-as-codefs
+### Translating tf output to yaml file for helm values
+
+```
+terraform output -json | jq -r 'to_entries[] | "\(.key): \(.value.value)"' > values.yaml
+```
 
 There are two services in this repo. One is a service account lister and the other is a token generator. Both are written in node and are intended to be run as a docker container in GKE.
 

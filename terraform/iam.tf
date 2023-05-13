@@ -22,3 +22,30 @@ resource "google_service_account_iam_binding" "workload_identity_user" {
 output "pod_agent_sa_email" {
   value = google_service_account.pod_agent.email
 }
+
+resource "google_service_account" "config_connector_agent" {
+  account_id = "config-connector-agent"
+}
+
+resource "google_project_iam_member" "config_connector_editor" {
+  project = var.project
+  role    = "roles/editor"
+  member  = "serviceAccount:${google_service_account.config_connector_agent.email}"
+}
+
+resource "google_service_account_iam_binding" "cc_agent_wi_user" {
+  service_account_id = google_service_account.config_connector_agent.name
+  role               = "roles/iam.workloadIdentityUser"
+  members = [
+    "serviceAccount:${var.project}.svc.id.goog[cnrm-system/cnrm-controller-manager]"
+  ]
+}
+
+output "cc_agent_sa_email" {
+  value = google_service_account.config_connector_agent.email
+}
+
+# TODO: move this to better place
+output "project" {
+  value = var.project
+}
