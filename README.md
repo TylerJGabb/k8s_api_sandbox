@@ -2,6 +2,8 @@
 
 ## Config Connector
 
+You'll need to install the config connector on your cluster manually, by installing the manifest at [configconnector-operator.yaml](./manifests/configconnector-operator.yaml)
+
 I am following this tutorial to install this on my cluster: https://cloud.google.com/config-connector/docs/how-to/advanced-install#manual
 
 I'm trying to do as much as I can in terraform.
