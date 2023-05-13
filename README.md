@@ -32,6 +32,8 @@ kubectl apply -f manifests/configconnector-operator.yaml
 
 8. Install the helm chart by running `helm install $RELEASE_NAME .` in the [manifests](./manifests/) directory
 
+   - note that the config connector k8s resource is in the helm templates, [configconnector.yaml](./manifests/templates/configconnector.yaml) so that this doesn't need to be performed manually
+
 ## Config Connector
 
 You'll need to install the config connector on your cluster manually, by installing the manifest at [configconnector-operator.yaml](./manifests/configconnector-operator.yaml)
@@ -41,6 +43,8 @@ I am following this tutorial to install this on my cluster: https://cloud.google
 I'm trying to do as much as I can in terraform.
 
 I was able to get the config connector installed and working with terraform. I'm now following https://cloud.google.com/config-connector/docs/how-to/getting-started
+
+Heres a good page to reference for the config connector: https://cloud.google.com/config-connector/docs/how-to/getting-started#whats_next
 
 ## Terraform
 

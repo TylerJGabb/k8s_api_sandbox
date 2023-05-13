@@ -9,6 +9,8 @@ provider "kubernetes" {
 resource "kubernetes_namespace" "terraform_managed_namespace" {
   metadata {
     name = "terraform-managed-namespace"
+    # annotate the namespace so that CNRM will create
+    # resources in this namespace
     annotations = {
       "cnrm.cloud.google.com/project-id" = var.project
     }

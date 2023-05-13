@@ -33,6 +33,13 @@ resource "google_project_iam_member" "config_connector_editor" {
   member  = "serviceAccount:${google_service_account.config_connector_agent.email}"
 }
 
+
+resource "google_project_iam_member" "config_connector_sa_admin" {
+  project = var.project
+  role    = "roles/iam.serviceAccountAdmin"
+  member  = "serviceAccount:${google_service_account.config_connector_agent.email}"
+}
+
 resource "google_service_account_iam_binding" "cc_agent_wi_user" {
   service_account_id = google_service_account.config_connector_agent.name
   role               = "roles/iam.workloadIdentityUser"
