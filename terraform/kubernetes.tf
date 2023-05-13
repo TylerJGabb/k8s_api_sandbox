@@ -22,31 +22,34 @@ resource "kubernetes_service_account" "pod_agent" {
   }
 }
 
-resource "kubernetes_cluster_role" "service_lister" {
+resource "kubernetes_role" "service_lister" {
   metadata {
-    name = "service_lister"
+    name      = "service_lister"
+    namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
   }
   rule {
-    api_groups = ["*"]
-    resources  = ["svc"]
+    api_groups = [""]
+    resources  = ["services"]
     verbs      = ["get", "list", "watch"]
   }
 }
 
-resource "kubernetes_cluster_role_binding" "pod_agent_service_lister" {
+resource "kubernetes_role_binding" "pod_agent_service_lister" {
   metadata {
-    name = "pod_agent_service_lister"
+    name      = "pod-agent-service-lister"
+    namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.service_lister.metadata[0].name
+    kind      = "Role"
+    name      = kubernetes_role.service_lister.metadata[0].name
   }
   subject {
     kind      = "ServiceAccount"
     name      = kubernetes_service_account.pod_agent.metadata[0].name
     namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
   }
+
 }
 
 output "k8s_pod_agent_service_account_name" {
