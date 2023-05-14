@@ -10,6 +10,7 @@
 - Kubernetes Engine API
 - Cloud Resource Manager API
 - Service Usage API
+- Cloud Billing API
 
 4. Create a service account (optionally named `tf-agent`) with the following roles in IAM
 

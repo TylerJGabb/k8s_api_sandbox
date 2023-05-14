@@ -33,6 +33,12 @@ resource "google_project_iam_member" "config_connector_editor" {
   member  = "serviceAccount:${google_service_account.config_connector_agent.email}"
 }
 
+resource "google_project_iam_member" "config_connector_sec_admin" {
+  project = var.project
+  role    = "roles/iam.securityAdmin"
+  member  = "serviceAccount:${google_service_account.config_connector_agent.email}"
+}
+
 
 resource "google_project_iam_member" "config_connector_sa_admin" {
   project = var.project

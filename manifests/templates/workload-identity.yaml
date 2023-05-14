@@ -36,16 +36,19 @@ spec:
 # https://cloud.google.com/config-connector/docs/how-to/import-export/overview
 # https://cloud.google.com/config-connector/docs/how-to/import-export/export
 
-# apiVersion: iam.cnrm.cloud.google.com/v1beta1
-# kind: IAMPolicyMember
-# metadata:
-#   name: "{{ .Values.pii_svc }}-iam-policy-storage-admin"
-# spec:
-#   resourceRef:
-#     kind: Project
-#     name: "{{ .Values.project }}"
-#   member: "serviceAccount:{{ .Values.pii_svc }}-gsa@{{ .Values.project }}.iam.gserviceaccount.com"
-#   role: roles/storage.admin
+# well that was a fuckin dooozey
+# need to have org to do this
+
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: "{{ .Values.pii_svc }}-iam-policy-storage-admin"
+spec:
+  resourceRef:
+    kind: Project
+    name: "{{ .Values.project }}"
+  member: "serviceAccount:{{ .Values.pii_svc }}-gsa@{{ .Values.project }}.iam.gserviceaccount.com"
+  role: roles/storage.admin
 ---
 apiVersion: apps/v1
 kind: Deployment
