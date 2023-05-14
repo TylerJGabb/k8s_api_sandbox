@@ -1,25 +1,25 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: sa-lister-deploy
-  name: sa-lister-deploy
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: sa-lister-deploy
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: sa-lister-deploy
-    spec:
-      containers:
-        - image: us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
-          name: sa-lister
-          resources: {}
-      serviceAccountName: {{ .Values.k8s_pod_agent_service_account_name }}
-status: {}
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   creationTimestamp: null
+#   labels:
+#     app: sa-lister-deploy
+#   name: sa-lister-deploy
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: sa-lister-deploy
+#   strategy: {}
+#   template:
+#     metadata:
+#       creationTimestamp: null
+#       labels:
+#         app: sa-lister-deploy
+#     spec:
+#       containers:
+#         - image: us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
+#           name: sa-lister
+#           resources: {}
+#       serviceAccountName: {{ .Values.k8s_pod_agent_service_account_name }}
+# status: {}

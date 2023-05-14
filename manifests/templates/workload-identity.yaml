@@ -29,6 +29,24 @@ spec:
       members:
         - "serviceAccount:{{.Values.project}}.svc.id.goog[terraform-managed-namespace/{{ .Values.pii_svc }}-ksa]"
 ---
+# Give the gsa roles/storage.admin
+# https://cloud.google.com/config-connector/docs/concepts/namespaces-and-projects
+# can't get this to work because the project was created before the cnrm was enabled
+# so the project doesn't exist in cnrm, so I can't reference it
+# https://cloud.google.com/config-connector/docs/how-to/import-export/overview
+# https://cloud.google.com/config-connector/docs/how-to/import-export/export
+
+# apiVersion: iam.cnrm.cloud.google.com/v1beta1
+# kind: IAMPolicyMember
+# metadata:
+#   name: "{{ .Values.pii_svc }}-iam-policy-storage-admin"
+# spec:
+#   resourceRef:
+#     kind: Project
+#     name: "{{ .Values.project }}"
+#   member: "serviceAccount:{{ .Values.pii_svc }}-gsa@{{ .Values.project }}.iam.gserviceaccount.com"
+#   role: roles/storage.admin
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
