@@ -1,32 +1,32 @@
 # Deploying
 
-## Create a project in GCP
+1. Create a project in GCP
 
-## `gcloud auth login` and select the project you just created
+2. `gcloud auth login` and select the project you just created
 
-## Enable the APIS
+3. Enable the APIS
 
 - Identity and Access MAnagaement (IAM) API
 - Kubernetes Engine API
 - Cloud Resource Manager API
 - Service Usage API
 
-## Create a service account (optionally named `tf-agent`) with the following roles in IAM
+4. Create a service account (optionally named `tf-agent`) with the following roles in IAM
 
 - Kubernetes Engine Service Agent
 - Editor
 - Security Admin
 - Service Account Admin
 
-## Generate a key for the sa created in step 2 and save it in the root of this repo as `tf-agent-credentials.json`
+5. Generate a key for the sa created in step 2 and save it in the root of this repo as `tf-agent-credentials.json`
 
-## Set the project id in the [terraform.tfvars](./terraform/terraform.tfvars) file
+6. Set the project id in the [terraform.tfvars](./terraform/terraform.tfvars) file
 
-## Create a new bucket in GCS to store terraform state
+7. Create a new bucket in GCS to store terraform state
 
-## Set the bucket name in the [main.tf](./terraform/main.tf) file
+8. Set the bucket name in the [main.tf](./terraform/main.tf) file to what you created in step 7
 
-## Run terraform in the [terraform](./terraform/) directory
+9. Run terraform in the [terraform](./terraform/) directory
 
 ```
 terraform init
@@ -34,7 +34,9 @@ terraform plan
 terraform apply
 ```
 
-## Configure kubectl to access the newly created cluster
+This will spin up an autopilot cluster, a namespace managed by tf, and a service accounts used by config connector
+
+10. Configure kubectl to access the newly created cluster
 
 - https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl
 
@@ -43,14 +45,16 @@ gcloud container clusters get-credentials terraform-managed-autopilot-cluster --
 kubectl config set-context --current --namespace=terraform-managed-namespace
 ```
 
-## Run `./generate_values.sh` from the [root](.) of the repo
+11. Generate values files for the various helm charts
 
-## Install the config connector to the cluster
+...TODO...
+
+12. Install the config connector to the cluster
 
 Make sure to set the `googleServiceAccount` to the service account created for CC in terraform
 
 ```
-kubectl apply -f manifests/configconnector-operator.yaml
+kubectl apply -f helm-charts/config-connector/templates/configconnector.yaml
 ```
 
 Wait a while after you do this, it takes a while for the config connector to install. You can wait with the following command:
@@ -65,15 +69,15 @@ pod/cnrm-webhook-manager-859b5cd977-kwwm7 condition met
 pod/cnrm-webhook-manager-859b5cd977-mglqn condition met
 ```
 
-## Import the project as a CNRM managed resource and place it into the helm templates
+13. Import the project as a CNRM managed resource and place it into the helm templates
 
 ```
-config-connector export //cloudresourcemanager.googleapis.com/projects/$PROJECT_ID > manifests/project.yaml
-k apply -f manifests/project.yaml
+config-connector export //cloudresourcemanager.googleapis.com/projects/$PROJECT_ID > project.yaml
+k apply -f project.yaml
 
 ```
 
-## Install the helm chart by running `helm install $RELEASE_NAME .` in the [manifests](./manifests/) directory
+TBC
 
 # Config Connector
 
