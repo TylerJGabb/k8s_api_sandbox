@@ -17,46 +17,17 @@ resource "kubernetes_namespace" "terraform_managed_namespace" {
   }
 }
 
-resource "kubernetes_service_account" "pod_agent" {
-  metadata {
-    name      = "pod-agent"
-    namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
-    annotations = {
-      "iam.gke.io/gcp-service-account" = google_service_account.pod_agent.email
-    }
-  }
-}
+# It would be nice to enable this in TF. perhaps in a separate phase/group
+# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/manifest#before-you-use-this-resource
 
-resource "kubernetes_role" "service_lister" {
-  metadata {
-    name      = "service_lister"
-    namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
-  }
-  rule {
-    api_groups = [""]
-    resources  = ["services"]
-    verbs      = ["get", "list", "watch"]
-  }
-}
+# resource "kubernetes_manifest" "connector_config" {
+#   manifest = yamldecode(templatefile("manifests/configconnector.tftpl",
+#     {
+#       gsa = google_service_account.config_connector_agent.email
+#     }
+#   ))
 
-resource "kubernetes_role_binding" "pod_agent_service_lister" {
-  metadata {
-    name      = "pod-agent-service-lister"
-    namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = kubernetes_role.service_lister.metadata[0].name
-  }
-  subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account.pod_agent.metadata[0].name
-    namespace = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
-  }
-
-}
-
-output "k8s_pod_agent_service_account_name" {
-  value = kubernetes_service_account.pod_agent.metadata[0].name
-}
+#   depends_on = [
+#     google_container_cluster.tf-autopilot-cluster
+#   ]
+# }

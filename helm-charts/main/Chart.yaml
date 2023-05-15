@@ -1,0 +1,5 @@
+apiVersion: v2
+name: main
+version: 1.0.0
+description: the actual manifests separate from infrastructure
+appVersion: 1.0.0

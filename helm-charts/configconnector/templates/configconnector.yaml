@@ -7,4 +7,4 @@ metadata:
   name: configconnector.core.cnrm.cloud.google.com
 spec:
   mode: cluster
-  googleServiceAccount: config-connector-agent@sb-0001-386703.iam.gserviceaccount.com
+  googleServiceAccount: "{{.Values.config_connector_agent_sa_email}}"

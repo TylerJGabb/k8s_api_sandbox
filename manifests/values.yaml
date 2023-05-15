@@ -1,6 +1,0 @@
-cc_agent_sa_email: config-connector-agent@sb-0001-386703.iam.gserviceaccount.com
-k8s_pod_agent_service_account_name: pod-agent
-pod_agent_sa_email: gke-pod-agent@sb-0001-386703.iam.gserviceaccount.com
-project: sb-0001-386703
-
-pii_svc: pii-1234

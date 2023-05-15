@@ -11,8 +11,8 @@ terraform {
   }
   # https://cloud.google.com/docs/terraform/resource-management/store-state
   backend "gcs" {
-    bucket = "tfstate-000002"
-    prefix = "terraform/state"
+    bucket = "tf-state-sb-05"
+    prefix = "terraform/foundation"
   }
 }
 

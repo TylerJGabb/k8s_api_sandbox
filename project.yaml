@@ -4,13 +4,13 @@ kind: Project
 metadata:
   annotations:
     cnrm.cloud.google.com/auto-create-network: "true"
-  name: sb-0001-386703
+  name: sb-05-386818
 spec:
   billingAccountRef:
     external: 012E03-9BC068-CD2D3E
-  name: sb-0001
+  name: sb-05
   organizationRef:
     external: "1004718213230"
-  resourceID: sb-0001-386703
+  resourceID: sb-05-386818
 ---
 

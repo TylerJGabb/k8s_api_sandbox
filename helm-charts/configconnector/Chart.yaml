@@ -1,0 +1,5 @@
+apiVersion: v2
+name: configconnector
+version: 1.0.0
+description: charts for managing configconnector
+appVersion: 1.0.0
