@@ -15,6 +15,8 @@ metadata:
 spec:
   displayName: "Created with CC for {{ .Values.pii_svc }}"
 ---
+# This is authoritative and might cause problems
+# Try to do this with a IAMPolicyMember instead
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicy
 metadata:

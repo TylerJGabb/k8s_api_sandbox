@@ -4,6 +4,24 @@
 2. It takes a while for config-connector to become fully active in a brand new autopilot cluster. patience is key
 3. DO NOT INCLUDE THE IAM POLICY IN THE PROJECT YAML. IT WILL BREAK THE PROJECT
 4. https://cloud.google.com/config-connector/docs/troubleshooting
+5. https://medium.com/google-cloud/setting-up-config-connector-with-terraform-helm-8ce2f45f48a4
+   - autopilot clusters are great, but they also limit addons and features
+
+# Proposed Improvements
+
+1. Use a terraform module to create a regular cluster
+   - make sure to configure linked SA properly
+   - then you can enable the addon with TF
+2. Try to install configconnector on the cluster as an addon manually
+   - https://cloud.google.com/config-connector/docs/how-to/install-upgrade-uninstall
+   - then try to automate this?
+
+# What is coming next
+
+I've already demonstrated that I can use config connector to create a pod and assign it a workload identity completely with helm.
+
+Its time to expand on this idea, and begin building the rest of the infrastructure: the actual meat of this project which is to show that we can maintain
+a list of services to be created, and create associated service accounts and workload identities for them.
 
 # Deploying
 
