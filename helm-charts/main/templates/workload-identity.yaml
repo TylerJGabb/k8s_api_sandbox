@@ -15,21 +15,17 @@ metadata:
 spec:
   displayName: "Created with CC for {{ .Values.pii_svc }}"
 ---
-# This is authoritative and might cause problems
-# Try to do this with a IAMPolicyMember instead
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
-kind: IAMPolicy
+kind: IAMPolicyMember
 metadata:
-  name: "{{ .Values.pii_svc }}-iam-policy"
+  name: "{{ .Values.pii_svc }}-iam-policy-member-wi"
 spec:
   resourceRef:
     apiVersion: iam.cnrm.cloud.google.com/v1beta1
     kind: IAMServiceAccount
     name: "{{ .Values.pii_svc }}-gsa"
-  bindings:
-    - role: roles/iam.workloadIdentityUser
-      members:
-        - "serviceAccount:{{.Values.project}}.svc.id.goog[terraform-managed-namespace/{{ .Values.pii_svc }}-ksa]"
+  role: roles/iam.workloadIdentityUser
+  member: "serviceAccount:{{.Values.project}}.svc.id.goog[terraform-managed-namespace/{{ .Values.pii_svc }}-ksa]"
 ---
 # Give the gsa roles/storage.admin
 # https://cloud.google.com/config-connector/docs/concepts/namespaces-and-projects
