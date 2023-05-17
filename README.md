@@ -1,3 +1,80 @@
+# PII Service POC
+
+Here is an image of the planned architecture
+![Architecture](./architecture.png)
+
+Its a big lift to automate generation of tables and taxonomy tags with IOC. for now lets just have one table with various columns, and various tags.
+
+| loan_id | ssn         | address       | name        | fico_score | property_state |
+| ------- | ----------- | ------------- | ----------- | ---------- | -------------- |
+| 1       | 123-45-6789 | 123 Main St   | John Smith  | 725        | CA             |
+| 2       | 987-65-4321 | 456 Elm St    | Jane Doe    | 650        | NY             |
+| 3       | 543-21-9876 | 789 Oak Ave   | David Lee   | 800        | TX             |
+| 4       | 876-54-3210 | 321 Pine St   | Sarah Brown | 690        | FL             |
+| 5       | 012-34-5678 | 567 Maple Ave | Alex Chen   | 720        | WA             |
+
+```SQL
+CREATE TABLE your_dataset_name.your_table_name (
+  loan_id INT64,
+  ssn STRING,
+  address STRING,
+  name STRING,
+  fico_score INT64,
+  property_state STRING
+);
+
+INSERT INTO your_dataset_name.your_table_name (loan_id, ssn, address, name, fico_score, property_state)
+VALUES
+  (1, '123-45-6789', '123 Main St', 'John Smith', 725, 'CA'),
+  (2, '987-65-4321', '456 Elm St', 'Jane Doe', 650, 'NY'),
+  (3, '543-21-9876', '789 Oak Ave', 'David Lee', 800, 'TX'),
+  (4, '876-54-3210', '321 Pine St', 'Sarah Brown', 690, 'FL'),
+  (5, '012-34-5678', '567 Maple Ave', 'Alex Chen', 720, 'WA');
+```
+
+Create three tags, one for each column with varying sensitivity
+
+| column  | tag  |
+| ------- | ---- |
+| ssn     | HIGH |
+| address | MED  |
+| name    | LOW  |
+
+Then we could have four token generating pods and associated service accounts
+
+| gsa                              | fine-grained reader role on tags |
+| -------------------------------- | -------------------------------- |
+| gsa-low-reader@example-proj.com  | LOW                              |
+| gsa-med-reader@example-proj.com  | MED                              |
+| gsa-high-reader@example-proj.com | HIGH                             |
+| gsa-all-reader@example-proj.com  | LOW, MED, HIGH                   |
+
+# BigQuery Column Level Security
+
+- https://cloud.google.com/bigquery/docs/column-level-security
+
+## How to enable column level security
+
+- create a dataset and table
+- create a taxonomy, toggle on access control
+- create tags in that taxonomy
+- add principals with the `roles/datacatalog.categoryFineGrainedReader` role to the tags
+- add the tags to protected columns in the dataset
+
+## Useful Docs
+
+- https://developer.hashicorp.com/terraform/language/functions/templatefile
+- https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/data_catalog_policy_tag_iam
+- https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/data_catalog_policy_tag
+- AUTOMATION: https://medium.com/@hana.le/how-to-implement-bigquery-policy-tag-with-dbt-and-terraform-e9c935df771f
+
+## Saved queries
+
+```
+bq query --nouse_legacy_sql 'select * from `sb-05-386818.multiregion.has_protection`'
+bq query --nouse_legacy_sql 'select unprotected from `sb-05-386818.multiregion.has_protection`'
+```
+
 # Lessons Learned
 
 1. Make sure output values are correctly copied to the values files
@@ -152,10 +229,6 @@ terraform output -json | jq -r 'to_entries[] | "\(.key): \(.value.value)"' > val
 
 ```
 
-There are two services in this repo. One is a service account lister and the other is a token generator. Both are written in node and are intended to be run as a docker container in GKE.
-
-I've included a script in each director [svc-lister/build_and_push.sh](./svc-lister/build_and_push.sh) and [token_generator/build_and_push.sh](./token_generator/build_and_push.sh) that will build the docker image and push it to GAR.
-
 # Listing items in GAR
 
 ```
@@ -167,9 +240,9 @@ gcloud artifacts files list --repository=docker-repo
 # very important to specify architecture when building image for cloud
 
 ```
-
-docker build --platform linux/amd64 -t sa-lister .
-docker tag sa-lister us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
-docker push us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
+IMG_NAME=hello-world
+docker build --platform linux/amd64 -t $IMG_NAME .
+docker tag $IMG_NAME us-central1-docker.pkg.dev/$PROJECT_ID/docker-repo/$IMG_NAME
+docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker-repo/$IMG_NAME
 
 ```
