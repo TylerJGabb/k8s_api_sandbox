@@ -8,3 +8,12 @@ does two things
 ## TODO: REname this directory query-runner
 
 https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query
+
+```
+curl -X GET \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "select * from `sb-05-386818.multiregion.table_with_pii`",
+    "piiPermission": "all"
+}' 'http://localhost/query'
+```

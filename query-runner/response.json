@@ -1,0 +1,74 @@
+{
+  "kind": "bigquery#queryResponse",
+  "schema": {
+    "fields": [
+      { "name": "loan_id", "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "ssn", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "address", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "name", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "fico_score", "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "property_state", "type": "STRING", "mode": "NULLABLE" }
+    ]
+  },
+  "jobReference": {
+    "projectId": "sb-05-386818",
+    "jobId": "job_2zAlKXWvwCnWyQ1DmeKh_L0pkRVz",
+    "location": "US"
+  },
+  "totalRows": "5",
+  "rows": [
+    {
+      "f": [
+        { "v": "5" },
+        { "v": "012-34-5678" },
+        { "v": "567 Maple Ave" },
+        { "v": "Alex Chen" },
+        { "v": "720" },
+        { "v": "WA" }
+      ]
+    },
+    {
+      "f": [
+        { "v": "3" },
+        { "v": "543-21-9876" },
+        { "v": "789 Oak Ave" },
+        { "v": "David Lee" },
+        { "v": "800" },
+        { "v": "TX" }
+      ]
+    },
+    {
+      "f": [
+        { "v": "2" },
+        { "v": "987-65-4321" },
+        { "v": "456 Elm St" },
+        { "v": "Jane Doe" },
+        { "v": "650" },
+        { "v": "NY" }
+      ]
+    },
+    {
+      "f": [
+        { "v": "1" },
+        { "v": "123-45-6789" },
+        { "v": "123 Main St" },
+        { "v": "John Smith" },
+        { "v": "725" },
+        { "v": "CA" }
+      ]
+    },
+    {
+      "f": [
+        { "v": "4" },
+        { "v": "876-54-3210" },
+        { "v": "321 Pine St" },
+        { "v": "Sarah Brown" },
+        { "v": "690" },
+        { "v": "FL" }
+      ]
+    }
+  ],
+  "totalBytesProcessed": "288",
+  "jobComplete": true,
+  "cacheHit": false
+}
