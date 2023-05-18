@@ -112,7 +112,7 @@ app.get("/svcs", async (req, res) => {
   res.status(200).send(svcs);
 });
 
-app.get("/query", async (req, res) => {
+app.post("/query", async (req, res) => {
   try {
     const {
       query,
