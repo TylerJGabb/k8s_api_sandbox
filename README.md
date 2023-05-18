@@ -63,6 +63,7 @@ Then we could have four token generating pods and associated service accounts
 
 ## Useful Docs
 
+- https://cloud.google.com/bigquery/docs/column-level-security#set_policy
 - https://developer.hashicorp.com/terraform/language/functions/templatefile
 - https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/data_catalog_policy_tag_iam
 - https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/data_catalog_policy_tag

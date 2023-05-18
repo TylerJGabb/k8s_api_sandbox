@@ -79,6 +79,8 @@ resource "google_data_catalog_policy_tag" "basic_policy_tag" {
   description  = "A policy tag normally associated with low security items"
 }
 
+// https://cloud.google.com/bigquery/docs/column-level-security#set_policy
+
 
 
 
