@@ -79,6 +79,23 @@ spec:
           name: "query-runner-container"
       serviceAccountName: "query-runner-ksa"
 ---
+# create a backend config for the service
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: query-runner-backendconfig
+  namespace: "{{ .Values.namespace }}"
+spec:
+  timeoutSec: 60
+  healthCheck:
+    checkIntervalSec: 30
+    port: 80
+    type: HTTP
+    timeoutSec: 15
+    healthyThreshold: 1
+    unhealthyThreshold: 5
+    requestPath: /healthz
+---
 # create a service pointing to the deployment
 apiVersion: v1
 kind: Service
@@ -87,6 +104,8 @@ metadata:
   labels:
     pii_permission: "query-runner"
     app: "query-runner-svc"
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"80": "query-runner-backendconfig"}}'
 spec:
   ports:
     - port: 80
@@ -97,7 +116,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: query-runner-ing
+  name: query-runner-ingress-1
   annotations:
     # If the class annotation is not specified it defaults to "gce".
     kubernetes.io/ingress.class: "gce"
