@@ -6,7 +6,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: "{{ . }}-ksa"
-  namespace: terraform-managed-namespace
+  namespace: {{ $.Values.namespace }}
   annotations:
     iam.gke.io/gcp-service-account: "{{ . }}-gsa@{{ $.Values.project }}.iam.gserviceaccount.com"
 ---
@@ -53,7 +53,7 @@ spec:
     kind: IAMServiceAccount
     name: "{{ . }}-gsa"
   role: roles/iam.workloadIdentityUser
-  member: "serviceAccount:{{ $.Values.project }}.svc.id.goog[terraform-managed-namespace/{{ . }}-ksa]"
+  member: "serviceAccount:{{ $.Values.project }}.svc.id.goog[{{ $.Values.namespace }}/{{ . }}-ksa]"
 ---
 # create a deployment using the service account
 apiVersion: apps/v1

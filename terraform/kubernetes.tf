@@ -17,6 +17,10 @@ resource "kubernetes_namespace" "terraform_managed_namespace" {
   }
 }
 
+output "namespace" {
+  value = kubernetes_namespace.terraform_managed_namespace.metadata[0].name
+}
+
 # It would be nice to enable this in TF. perhaps in a separate phase/group
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/manifest#before-you-use-this-resource
 

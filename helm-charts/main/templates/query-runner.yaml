@@ -1,0 +1,97 @@
+---
+# create ksa
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: query-runner-ksa
+  namespace: "{{ .Values.namespace }}"
+---
+# create a service reading role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: "{{ .Values.namespace }}"
+  name: svc-reader
+rules:
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["services"]
+    verbs: ["get", "watch", "list"]
+---
+# create a service reading role binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: query-runner-svc-reader
+  namespace: "{{ .Values.namespace }}"
+subjects:
+  - kind: ServiceAccount
+    name: query-runner-ksa
+    namespace: "{{ .Values.namespace }}"
+roleRef:
+  kind: Role
+  name: svc-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+# create gsa (preemptive, in case we need to give it some cloud perms)
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMServiceAccount
+metadata:
+  name: query-runner-gsa
+spec:
+  displayName: "Created with CC for query-runner"
+---
+# setup workload identity for the ksa
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: "query-runner-workload-identity-policy"
+spec:
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1beta1
+    kind: IAMServiceAccount
+    name: "query-runner-gsa"
+  role: roles/iam.workloadIdentityUser
+  member: "serviceAccount:{{ $.Values.project }}.svc.id.goog[{{ $.Values.namespace }}/query-runner-ksa]"
+---
+# create a deployment using the service account
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: "query-runner-deploy"
+  name: "query-runner-deploy"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "query-runner-deploy"
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: "query-runner-deploy"
+    spec:
+      containers:
+        # - image: google/cloud-sdk
+        - image: "{{ $.Values.query_runner_image }}:{{ $.Values.query_runner_image_tag }}"
+          name: "query-runner-container"
+      serviceAccountName: "query-runner-ksa"
+---
+# create a service pointing to the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: "query-runner-svc"
+  labels:
+    pii_permission: "query-runner"
+    app: "query-runner-svc"
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: "query-runner-deploy"
+---
+
