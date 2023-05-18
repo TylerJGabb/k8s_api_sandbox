@@ -90,6 +90,7 @@ kind: Service
 metadata:
   name: "{{ . }}-svc"
   labels:
+    is_pii_service: "true"
     pii_permission: "{{ . }}"
     app: "{{ . }}-svc"
 spec:
