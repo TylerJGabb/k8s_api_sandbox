@@ -14,11 +14,9 @@ const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
 const getSvcs = async () => {
   try {
-    const { response, body } = await k8sApi.listNamespacedService(NAMESPACE);
-    console.debug(
-      `getSvcs: status=${response.statusCode}, response=${JSON.stringify(
-        response
-      )}`
+    const { response, body } = await k8sApi.listNamespacedService(
+      NAMESPACE,
+      (labelSelector = "pii_permission")
     );
     if (response.statusCode !== 200) {
       console.warn(`getSvcs: status was not ok. ${JSON.stringify(response)}`);
@@ -139,6 +137,7 @@ app.post("/query", async (req, res) => {
       return res.status(500).send("Failed to get jwt");
     }
     const queryResult = await queryBq(accessTok, query);
+    res.setHeader("Content-Type", "application/json");
     res.status(queryResult.status).send(queryResult.data);
   } catch (err) {
     console.error("Error", err);

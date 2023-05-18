@@ -102,7 +102,6 @@ kind: Service
 metadata:
   name: "query-runner-svc"
   labels:
-    pii_permission: "query-runner"
     app: "query-runner-svc"
   annotations:
     cloud.google.com/backend-config: '{"ports": {"80": "query-runner-backendconfig"}}'
