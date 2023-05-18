@@ -3,7 +3,7 @@
 Here is an image of the planned architecture
 ![Architecture](./architecture.png)
 
-Its a big lift to automate generation of tables and taxonomy tags with IOC. for now lets just have one table with various columns, and various tags.
+Its a big lift to automate generation of tables and taxonomy tags with IAC. for now lets just have one table with various columns, and various tags.
 
 | loan_id | ssn         | address       | name        | fico_score | property_state |
 | ------- | ----------- | ------------- | ----------- | ---------- | -------------- |
@@ -73,6 +73,7 @@ Then we could have four token generating pods and associated service accounts
 ```
 bq query --nouse_legacy_sql 'select * from `sb-05-386818.multiregion.has_protection`'
 bq query --nouse_legacy_sql 'select unprotected from `sb-05-386818.multiregion.has_protection`'
+bq query --nouse_legacy_sql 'select * from `sb-05-386818.multiregion.table_with_pii`'
 ```
 
 # Lessons Learned
@@ -113,6 +114,8 @@ a list of services to be created, and create associated service accounts and wor
 - Cloud Resource Manager API
 - Service Usage API
 - Cloud Billing API
+- BigQuery API
+- Data Catalog API
 
 4. Create a service account (optionally named `tf-agent`) with the following roles in IAM
 
@@ -212,6 +215,12 @@ I'm trying to do as much as I can in terraform.
 I was able to get the config connector installed and working with terraform. I'm now following https://cloud.google.com/config-connector/docs/how-to/getting-started
 
 Heres a good page to reference for the config connector: https://cloud.google.com/config-connector/docs/how-to/getting-started#whats_next
+
+## Importing/Exporting
+
+If the Google Cloud resource that you want to import into Config Connector already exists with the same name, then Config Connector takes control of the resource and manages it with the YAML that you provide. Config Connector doesn't throw an error in this situation unless the provided YAML contains changes to immutable fields or has other issues in the configuration.
+
+https://cloud.google.com/config-connector/docs/how-to/import-export/overview
 
 ## Troubleshooting
 
