@@ -1,3 +1,8 @@
-docker build --platform linux/amd64 -t sa-lister .
-docker tag sa-lister us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
-docker push us-central1-docker.pkg.dev/a-proj-to-be-deleted/docker-repo/sa-lister
+PROJECT=$(gcloud config get-value project)
+IMG_NAME=pii-translator
+REPO="us-central1-docker.pkg.dev/$PROJECT/docker-repo"
+VERSION="1.0.1"
+TAG="${REPO}/${IMG_NAME}:${VERSION}"
+docker build --platform linux/amd64 -t $TAG .
+docker push $TAG
+echo $TAG

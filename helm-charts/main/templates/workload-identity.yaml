@@ -76,11 +76,12 @@ spec:
         app: "{{ . }}-deploy"
     spec:
       containers:
-        - image: google/cloud-sdk
+        # - image: google/cloud-sdk
+        - image: "{{ $.Values.pii_svc_image }}:{{ $.Values.pii_svc_image_tag }}"
           name: "{{ . }}-container"
-          resources: {}
-          command: ["/bin/bash", "-c", "--"]
-          args: ["while true; do sleep 30; done;"]
+          # resources: {}
+          # command: ["/bin/bash", "-c", "--"]
+          # args: ["while true; do sleep 30; done;"]
       serviceAccountName: "{{ . }}-ksa"
 ---
 # create a service pointing to the deployment
@@ -89,6 +90,7 @@ kind: Service
 metadata:
   name: "{{ . }}-svc"
   labels:
+    pii_permission: "{{ . }}"
     app: "{{ . }}-svc"
 spec:
   ports:

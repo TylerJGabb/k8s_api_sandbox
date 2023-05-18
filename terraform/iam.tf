@@ -9,8 +9,8 @@ resource "google_project_iam_member" "config_connector_perms" {
     "roles/iam.serviceAccountAdmin"
   ])
   project = var.project
-  member = "serviceAccount:${google_service_account.config_connector_agent.email}"
-  role = each.key
+  member  = "serviceAccount:${google_service_account.config_connector_agent.email}"
+  role    = each.key
 }
 
 resource "google_service_account_iam_binding" "config_connector_cnrm_wi" {
