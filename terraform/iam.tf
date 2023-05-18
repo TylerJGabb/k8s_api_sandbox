@@ -1,6 +1,6 @@
 resource "google_service_account" "config_connector_agent" {
   account_id = "config-connector-agent"
-  depends_on = [ google_project_service.enable_apis ]
+  depends_on = [google_project_service.enable_apis]
 }
 
 resource "google_project_iam_member" "config_connector_perms" {

@@ -9,11 +9,3 @@ variable "region" {
 output "project" {
   value = var.project
 }
-
-variable "pii_table" {
-  default = "pii_table"
-}
-
-variable "pii_dataset" {
-  default = "pii_dataset"
-}

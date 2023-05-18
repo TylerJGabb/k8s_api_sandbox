@@ -17,7 +17,7 @@ resource "google_container_cluster" "tf-autopilot-cluster" {
   # https://github.com/hashicorp/terraform-provider-google/issues/10782#issuecomment-1080195853
   ip_allocation_policy {}
 
-  depends_on = [ google_project_service.enable_apis ]
+  depends_on = [google_project_service.enable_apis]
 }
 
 output "cluster_endpoint" {
