@@ -101,6 +101,36 @@ resource "google_data_catalog_policy_tag" "high_policy_tag" {
   description  = "A policy tag normally associated with high security items"
 }
 
+resource "google_bigquery_datapolicy_data_policy" "low_masking_data_policy" {
+  location         = var.region
+  data_policy_id   = "low_masking_data_policy"
+  policy_tag       = google_data_catalog_policy_tag.low_policy_tag.name
+  data_policy_type = "DATA_MASKING_POLICY"
+  data_masking_policy {
+    predefined_expression = "ALWAYS_NULL"
+  }
+}
+
+resource "google_bigquery_datapolicy_data_policy" "med_masking_data_policy" {
+  location         = var.region
+  data_policy_id   = "med_masking_data_policy"
+  policy_tag       = google_data_catalog_policy_tag.med_policy_tag.name
+  data_policy_type = "DATA_MASKING_POLICY"
+  data_masking_policy {
+    predefined_expression = "ALWAYS_NULL"
+  }
+}
+
+resource "google_bigquery_datapolicy_data_policy" "high_masking_data_policy" {
+  location         = var.region
+  data_policy_id   = "high_masking_data_policy"
+  policy_tag       = google_data_catalog_policy_tag.high_policy_tag.name
+  data_policy_type = "DATA_MASKING_POLICY"
+  data_masking_policy {
+    predefined_expression = "ALWAYS_NULL"
+  }
+}
+
 // https://cloud.google.com/bigquery/docs/column-level-security#set_policy
 
 output "high_policy_tag_name" {
@@ -114,6 +144,20 @@ output "med_policy_tag_name" {
 output "low_policy_tag_name" {
   value = google_data_catalog_policy_tag.low_policy_tag.name
 }
+
+output "low_masking_data_policy_id" {
+  value = google_bigquery_datapolicy_data_policy.low_masking_data_policy.data_policy_id
+}
+
+output "med_masking_data_policy_id" {
+  value = google_bigquery_datapolicy_data_policy.med_masking_data_policy.data_policy_id
+}
+
+output "high_masking_data_policy_id" {
+  value = google_bigquery_datapolicy_data_policy.high_masking_data_policy.data_policy_id
+}
+
+
 
 
 

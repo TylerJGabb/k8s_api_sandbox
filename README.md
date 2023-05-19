@@ -3,8 +3,6 @@
 Here is an image of the planned architecture
 ![Architecture](./architecture.png)
 
-Its a big lift to automate generation of tables and taxonomy tags with IAC. for now lets just have one table with various columns, and various tags.
-
 | loan_id | ssn         | address       | name        | fico_score | property_state |
 | ------- | ----------- | ------------- | ----------- | ---------- | -------------- |
 | 1       | 123-45-6789 | 123 Main St   | John Smith  | 725        | CA             |
@@ -40,7 +38,7 @@ Create three tags, one for each column with varying sensitivity
 | address | MED  |
 | name    | LOW  |
 
-Then we could have four token generating pods and associated service accounts
+Then have four token generating pods and associated service accounts
 
 | gsa                              | fine-grained reader role on tags |
 | -------------------------------- | -------------------------------- |

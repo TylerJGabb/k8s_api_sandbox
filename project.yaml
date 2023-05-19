@@ -4,13 +4,11 @@ kind: Project
 metadata:
   annotations:
     cnrm.cloud.google.com/auto-create-network: "true"
-  name: sb-05-386818
+  name: pii-poc-tg0518
 spec:
   billingAccountRef:
-    external: 012E03-9BC068-CD2D3E
-  name: sb-05
-  organizationRef:
-    external: "1004718213230"
-  resourceID: sb-05-386818
----
-
+    external: 011182-601A30-7C163B
+  folderRef:
+    external: "764417221947"
+  name: pii-poc-tg0518
+  resourceID: pii-poc-tg0518
