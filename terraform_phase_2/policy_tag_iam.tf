@@ -3,8 +3,8 @@ resource "google_data_catalog_policy_tag_iam_member" "policy_tag_iam_high" {
   member     = "serviceAccount:${each.value}"
   role       = "roles/datacatalog.categoryFineGrainedReader"
   for_each = toset([
-    "all-gsa@sb-05-386818.iam.gserviceaccount.com",
-    "high-gsa@sb-05-386818.iam.gserviceaccount.com",
+    "all-gsa@${var.project}.iam.gserviceaccount.com",
+    "high-gsa@${var.project}.iam.gserviceaccount.com",
   ])
 
 }
@@ -14,8 +14,8 @@ resource "google_data_catalog_policy_tag_iam_member" "policy_tag_iam_med" {
   member     = "serviceAccount:${each.value}"
   role       = "roles/datacatalog.categoryFineGrainedReader"
   for_each = toset([
-    "all-gsa@sb-05-386818.iam.gserviceaccount.com",
-    "med-gsa@sb-05-386818.iam.gserviceaccount.com",
+    "all-gsa@${var.project}.iam.gserviceaccount.com",
+    "med-gsa@${var.project}.iam.gserviceaccount.com",
   ])
 }
 
@@ -24,7 +24,7 @@ resource "google_data_catalog_policy_tag_iam_member" "policy_tag_iam_low" {
   member     = "serviceAccount:${each.value}"
   role       = "roles/datacatalog.categoryFineGrainedReader"
   for_each = toset([
-    "all-gsa@sb-05-386818.iam.gserviceaccount.com",
-    "low-gsa@sb-05-386818.iam.gserviceaccount.com",
+    "all-gsa@${var.project}.iam.gserviceaccount.com",
+    "low-gsa@${var.project}.iam.gserviceaccount.com",
   ])
 }
