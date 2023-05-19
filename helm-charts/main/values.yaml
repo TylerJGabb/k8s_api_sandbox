@@ -11,4 +11,6 @@ pii_svc_image_tag: "1.0.1"
 namespace: terraform-managed-namespace
 
 query_runner_image: "us-central1-docker.pkg.dev/sb-05-386818/docker-repo/query-runner"
-query_runner_image_tag: "1.1.3"
+query_runner_image_tag: "1.1.4"
+---
+

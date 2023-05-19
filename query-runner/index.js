@@ -5,7 +5,7 @@ const axios = require("axios").default;
 const jwt = require("jsonwebtoken");
 
 const NAMESPACE = "terraform-managed-namespace";
-const PROJECT = "sb-05-386818";
+const PROJECT = process.env.PROJECT;
 const PORT = 80;
 const FAKE_SIGNING_KEY = "shhhhhh";
 
