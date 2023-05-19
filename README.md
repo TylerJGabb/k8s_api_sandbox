@@ -85,6 +85,14 @@ bq query --nouse_legacy_sql 'select * from `sb-05-386818.multiregion.table_with_
 4. https://cloud.google.com/config-connector/docs/troubleshooting
 5. https://medium.com/google-cloud/setting-up-config-connector-with-terraform-helm-8ce2f45f48a4
    - autopilot clusters are great, but they also limit addons and features
+6. very important to specify architecture when building image for cloud
+
+   ```sh
+   IMG_NAME=hello-world
+   docker build --platform linux/amd64 -t $IMG_NAME .
+   docker tag $IMG_NAME us-central1-docker.pkg.dev/$PROJECT_ID/docker-repo/$IMG_NAME
+   docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker-repo/$IMG_NAME
+   ```
 
 # Proposed Improvements
 
@@ -141,7 +149,8 @@ terraform plan
 terraform apply
 ```
 
-This will spin up an autopilot cluster, a namespace managed by tf, and a service accounts used by config connector
+- Among other things, this will spin up an autopilot cluster, a namespace managed by tf, and a service accounts used by config connector
+- This will also create a dataset, the name of which is accessible via the terraform output named `pii_table`
 
 10. Configure kubectl to access the newly created cluster
 
@@ -152,15 +161,25 @@ gcloud container clusters get-credentials terraform-managed-autopilot-cluster --
 kubectl config set-context --current --namespace=terraform-managed-namespace
 ```
 
-11. Generate values files for the various helm charts
+11. Fill in values in valies files for helm charts
 
-```sh
-./generate_values.sh
-```
+- [helm_charts/configconnector/values.yaml](./helm-charts/configconnector/values.yaml)
+
+  ```yaml
+  config_connector_agent_sa_email: "<terraform output named ${config_connector_agent_sa_email}>"
+  project: "<terraform output named ${project}>"
+  ```
+
+- [helm_charts/main/values.yaml](./helm-charts/main/values.yaml)
+  ```yaml
+  ...other values...
+  ...
+  ...even more values...
+  config_connector_agent_sa_email: "<terraform output named ${config_connector_agent_sa_email}>"
+  project: "<terraform output named ${project}>"
+  ```
 
 12. Install the config connector to the cluster
-
-Make sure to set the `googleServiceAccount` to the service account created for CC in terraform
 
 ```sh
 cd helm-charts/configconnector_operator
@@ -182,14 +201,21 @@ pod/cnrm-webhook-manager-859b5cd977-kwwm7 condition met
 pod/cnrm-webhook-manager-859b5cd977-mglqn condition met
 ```
 
+This will usually trigger an update to the cluster. Walk away... come back in an hour minimum. Don't just sit there fubmling helm and kubectl commands like I did.
+
 14. Import the project as a CNRM managed resource and place it into the helm templates
 
 # DO NOT INCLUDE THE IAM POLICY
 
+# DO NOT INCLUDE THE IAM POLICY
+
+# WHAT IS IT THAT WE ARE NOT IMPORTING? THE IAM POLICY
+
 ```sh
 # exporting
-config-connector export //cloudresourcemanager.googleapis.com/projects/sb-05-386818 > project.yaml
+config-connector export //cloudresourcemanager.googleapis.com/projects/$PROJECT > project.yaml
 # omit everything except the first manifest, this avoids the IAMPolicy which is authoritative and dangerous
+# this is a hacky way to do this, and doesn't always work
 awk '/---/ {count++} count == 2 {exit} {print}' project.yaml > project.yaml
 # add the project
 k apply -n terraform-managed-namespace -f project.yaml
@@ -197,13 +223,16 @@ k apply -n terraform-managed-namespace -f project.yaml
 
 15. Install the main helm chart
 
-- make sure to add the entry `pii_svc` to the [values.yaml](./helm-charts/main/values.yaml) file
-
 ```sh
-cat "pii_svc: pii_abc" >> helm-charts/main/values.yaml
 cd helm-charts/main
 helm install main .
 ```
+
+This _will_ trigger a significant cluster scale up. Again, walk away...
+
+16. Run the second phase of terraform in [terraform_phase_2](./terraform_phase_2/)
+
+- This will attatch the IAM servcie accounts created in step 15 to data catalog tags that were created in step 9.
 
 # Config Connector
 
@@ -222,37 +251,3 @@ Heres a good page to reference for the config connector: https://cloud.google.co
 If the Google Cloud resource that you want to import into Config Connector already exists with the same name, then Config Connector takes control of the resource and manages it with the YAML that you provide. Config Connector doesn't throw an error in this situation unless the provided YAML contains changes to immutable fields or has other issues in the configuration.
 
 https://cloud.google.com/config-connector/docs/how-to/import-export/overview
-
-## Troubleshooting
-
-https://cloud.google.com/config-connector/docs/troubleshooting
-
-# Terraform
-
-I'm currently in the process of trying to manage this infrastructure in terraform so that it can be easily ported for hackday.
-
-## Translating tf output to yaml file for helm values
-
-```
-
-terraform output -json | jq -r 'to_entries[] | "\(.key): \(.value.value)"' > values.yaml
-
-```
-
-# Listing items in GAR
-
-```
-
-gcloud artifacts files list --repository=docker-repo
-
-```
-
-# very important to specify architecture when building image for cloud
-
-```
-IMG_NAME=hello-world
-docker build --platform linux/amd64 -t $IMG_NAME .
-docker tag $IMG_NAME us-central1-docker.pkg.dev/$PROJECT_ID/docker-repo/$IMG_NAME
-docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker-repo/$IMG_NAME
-
-```
