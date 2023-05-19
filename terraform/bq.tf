@@ -15,15 +15,24 @@ resource "google_bigquery_table" "pii_table" {
         },
         {
             "name": "ssn",
-            "type": "STRING"
+            "type": "STRING",
+            "policyTags": {
+                "names": ["${google_data_catalog_policy_tag.high_policy_tag.name}"]
+            }
         },
         {
             "name": "address",
-            "type": "STRING"
+            "type": "STRING",
+            "policyTags": {
+                "names": ["${google_data_catalog_policy_tag.med_policy_tag.name}"]
+            }
         },
         {
             "name": "name",
-            "type": "STRING"
+            "type": "STRING",
+            "policyTags": {
+                "names": ["${google_data_catalog_policy_tag.low_policy_tag.name}"]
+            }            
         },
         {
             "name": "fico_score",
@@ -70,17 +79,41 @@ resource "google_data_catalog_taxonomy" "tf_taxonomy" {
   display_name           = "TF Taxonomy"
   description            = "TF Taxonomy"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
-  depends_on             = [google_bigquery_table.pii_table]
 }
 
-resource "google_data_catalog_policy_tag" "basic_policy_tag" {
+resource "google_data_catalog_policy_tag" "low_policy_tag" {
   taxonomy     = google_data_catalog_taxonomy.tf_taxonomy.id
-  display_name = "Low security"
+  display_name = "LOW"
   description  = "A policy tag normally associated with low security items"
+}
+
+//create a med policy tag
+resource "google_data_catalog_policy_tag" "med_policy_tag" {
+  taxonomy     = google_data_catalog_taxonomy.tf_taxonomy.id
+  display_name = "MED"
+  description  = "A policy tag normally associated with medium security items"
+}
+
+//create a high policy tag
+resource "google_data_catalog_policy_tag" "high_policy_tag" {
+  taxonomy     = google_data_catalog_taxonomy.tf_taxonomy.id
+  display_name = "HIGH"
+  description  = "A policy tag normally associated with high security items"
 }
 
 // https://cloud.google.com/bigquery/docs/column-level-security#set_policy
 
+output "high_policy_tag_name" {
+  value = google_data_catalog_policy_tag.high_policy_tag.name
+}
+
+output "med_policy_tag_name" {
+  value = google_data_catalog_policy_tag.med_policy_tag.name
+}
+
+output "low_policy_tag_name" {
+  value = google_data_catalog_policy_tag.low_policy_tag.name
+}
 
 
 

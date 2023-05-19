@@ -9,6 +9,7 @@ const PROJECT = "sb-05-386818";
 const PORT = 80;
 const FAKE_SIGNING_KEY = "shhhhhh";
 
+axios.defaults.validateStatus = () => true;
 const app = express();
 const kc = new k8s.KubeConfig();
 kc.loadFromCluster();
